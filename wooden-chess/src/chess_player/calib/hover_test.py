@@ -16,7 +16,7 @@ import numpy as np
 from chess_player import config as C
 from chess_player.geometry import BoardToRobot, square_center_mm
 from chess_player.motion.arm import Arm, FakeArm, look_pose
-from chess_player.motion.ik import IK, solve_or_raise
+from chess_player.motion.ik import IK, solve_or_raise, solve_high
 
 
 def tip_height_mm(ik, T, joints):
@@ -40,8 +40,21 @@ def main():
         q[4] = C.WRIST_ROLL_DEG
         for name in a.squares:
             xy = square_center_mm(chess.parse_square(name))
-            hi = solve_or_raise(ik, T(*xy, C.Z_SAFE), q, what=f"{name} high")
-            lo = solve_or_raise(ik, T(*xy, a.height), hi, C.GRASP_MAX_TILT, what=f"{name} low")
+            try:
+                hi = solve_high(ik, T, xy, q, f"{name} high")
+            except Exception as e:
+                print(f"  ({name}: no travel pose: {e}; going straight to the hover height)")
+                hi = q
+            lo = None
+            for tilt in (C.GRASP_MAX_TILT, 90.0):
+                try:
+                    lo = solve_or_raise(ik, T(*xy, a.height), hi, tilt, what=f"{name} low")
+                    break
+                except Exception as e:
+                    err_low = e
+            if lo is None:
+                print(f"  cannot reach {name} at {a.height:.0f} mm ({err_low}): skipping it")
+                continue
             arm.move_to({**dict(zip(C.ARM_JOINTS, hi)), "gripper": 0.0})
             if not a.no_sag_fix:
                 arm.settle()

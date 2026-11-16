@@ -8,7 +8,7 @@ import chess
 
 from chess_player.game import state
 from chess_player.motion.ik import Unreachable
-from chess_player.motion.pick_place import GraspFailed
+from chess_player.motion.transfers import GraspFailed
 
 TOOLS = [
     {

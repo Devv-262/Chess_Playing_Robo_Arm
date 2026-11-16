@@ -44,6 +44,41 @@ def score_position(board: chess.Board, dets: dict) -> float:
     return s
 
 
+def score_position_occ(board: chess.Board, dets: dict) -> float:
+    """Like score_position but only occupancy and COLOUR count, never the piece type. YOLO often misreads a type (knight/bishop,
+    queen/king, pawn/rook) on the square a piece just moved to; that must not stop a clearly visible move from registering."""
+    s = 0.0
+    for sq in chess.SQUARES:
+        p = board.piece_at(sq)
+        d = dets.get(sq)
+        if p is None:
+            s += 0.5 if d is None else -d[1]
+        elif d is None:
+            s -= 0.5
+        else:
+            s += d[1] if d[0].isupper() == p.color else -d[1]
+    return s
+
+
+def infer_move_occ(board: chess.Board, dets: dict, margin: float = 1.5):
+    """Fallback when the type-aware reading is ambiguous: the legal move that best explains where white/black pieces stand now.
+    Returns (move, best, second, stay) or None when no single move wins clearly over the others AND over 'nothing happened'."""
+    ranked = []
+    for m in board.legal_moves:
+        b = board.copy(stack=False)
+        b.push(m)
+        ranked.append((m, score_position_occ(b, dets)))
+    if not ranked:
+        return None
+    ranked.sort(key=lambda x: -x[1])
+    second = ranked[1][1] if len(ranked) > 1 else float("-inf")
+    stay = score_position_occ(board, dets)
+    best = ranked[0]
+    if best[1] - second >= margin and best[1] > stay + 1.5:
+        return best[0], best[1], second, stay
+    return None
+
+
 def score_by_detections(board: chess.Board, dets: dict) -> list:
     """Agreement between each candidate position and YOLO detections {square: (symbol, conf)}.
 
@@ -154,24 +189,35 @@ def why_illegal(board: chess.Board) -> list[str]:
 
 
 def prune_impossible(seen: dict) -> tuple[dict, list[str]]:
-    """Drop camera readings that cannot be real: a side has at most 16 pieces and 8 pawns, so the lowest-confidence extras are phantoms
-    (a tall piece's head read as a pawn one square away, a duplicate box). `seen` = {square: (symbol, conf)}.
-    Returns (pruned copy, dropped square names)."""
+    """Drop camera readings that cannot be real, keeping the highest-confidence ones. `seen` = {square: (symbol, conf)}.
+    Per side: at most 1 king, 8 pawns, 16 pieces, and promotions only for missing pawns (extra N/B/R/Q beyond the starting
+    2/2/2/1 must be covered by 8 - pawns). A tall piece's head read as a pawn, a bishop read as a pawn, a duplicate box: the
+    lowest-confidence surplus of an over-full type goes first.  Returns (pruned copy, dropped square names)."""
     seen = dict(seen)
     dropped = []
-    for white in (True, False):
-        def mine(only_pawns=False):
-            return sorted((conf, sq) for sq, (sym, conf) in seen.items()
-                          if sym.isupper() == white and (not only_pawns or sym.lower() == "p"))
+    base = {"k": 1, "q": 1, "r": 2, "b": 2, "n": 2, "p": 8}
 
-        while len(mine(True)) > 8:
-            _, sq = mine(True)[0]
-            dropped.append(chess.square_name(sq))
-            del seen[sq]
+    def drop(sq):
+        dropped.append(chess.square_name(sq))
+        del seen[sq]
+
+    for white in (True, False):
+        def mine(kind=None):  # [(conf, sq)] lowest confidence first
+            return sorted((conf, sq) for sq, (sym, conf) in seen.items()
+                          if sym.isupper() == white and (kind is None or sym.lower() == kind))
+
+        while len(mine("k")) > 1:
+            drop(mine("k")[0][1])
+        while len(mine("p")) > 8:
+            drop(mine("p")[0][1])
+        while True:  # promotions: surplus over the starting count of N/B/R/Q must fit in the missing pawns
+            surplus = {k: len(mine(k)) - base[k] for k in "qrbn" if len(mine(k)) > base[k]}
+            if sum(surplus.values()) <= 8 - len(mine("p")):
+                break
+            worst = min((mine(k)[0] for k in surplus))  # lowest-confidence piece among the over-full types
+            drop(worst[1])
         while len(mine()) > 16:
-            _, sq = mine()[0]
-            dropped.append(chess.square_name(sq))
-            del seen[sq]
+            drop(mine()[0][1])
     return seen, dropped
 
 

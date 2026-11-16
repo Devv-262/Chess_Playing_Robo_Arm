@@ -199,3 +199,23 @@ Bishop: grip 25.05 -> 45.05 mm and the pawn's finger numbers (thick upper part),
 **Still TEMPORARY in `simple_pick_place.py`** (user's tests, remove or make permanent on their word): `TEMP_DX = -5` (every centre 5 mm toward -X), `TEMP_DZ = 0` (was +10: pads on the head), `TEMP_PLACE_DZ = +8`. The carry height is always-high (`CARRY_EXTRA_MM = 30` in wooden_pick_place.py).
 **Calibration today:** `scripts/regrid.sh` (camera grid, board had one pawn on it, fit 0.8 px median) and `scripts/recalibrate.sh` (4-corner touch + nudge by eye; its nudge keys are from the HUMAN's seat = opposite left/right of the robot frame). The new board surface is ~6-8 mm higher in robot z than the previous calibration at e2/e4.
 **Open:** pick/place accuracy per square after the finger offset came back (the user reports misses in X/Y/Z, apply exactly); heights depend on the board plane of the latest calibration; far ranks (7, 8) undershoot ~4 mm in Y; non-pawn pieces on the simple path; the game wiring; YOLO retrain; VLM second opinion for illegal-move explanation (idea only).
+
+## 2026-11-10 (night): DEFAULT RECALIBRATION = ONE ANCHOR SQUARE (verified by the user: king, pawn etc. from many squares, "amazing" accuracy)
+`scripts/anchor.sh [square]` (`calib/anchor_grid.py`): torque off, the user puts the tip of the FIXED finger (jaws closed) on the centre of ONE square (default a1), Enter; all 64 entries of
+`data/center_teach.json` are rewritten as ideal board centre + (taught anchor - ideal anchor), converted with the current `board_to_robot.json` (gives the board's axes; run `scripts/recalibrate.sh`
+first if the board was turned/moved much). Exact 30 mm pitch worked (the 31.5/32.8 mm pitch seen in the hand-taught 11-09 data was hand noise + a stretched arm readout, not needed).
+The hand-taught 64-square approach, the pawn_walk fit and camera x,y are NOT the default any more. Old per-square data is never reused (the setup keeps moving). The per-piece grips need redoing for the NEW GRIPPER (mounted 2026-11-10).
+
+## 2026-11-10 (late night): CLEAN-UP + WIRING (read this first; it replaces the older sections' motion/teaching descriptions)
+- ONE motion: `motion/simple_pick_place.py` (what `scripts/move.sh` runs) is now also what the game/dashboard/`main.py` play (`SimplePickPlace`: play/check/execute/go_look). Captures (graveyard), castling,
+  en passant and promotion (spare QUEEN; the engine's under-promotions become queens) go through `motion/transfers.py` (plan_move/Slots) on top of it. Planning checked on a simulated arm for all legal moves of
+  the start position, a castling/capture position, en passant and promotion (all reachable).
+- ONE recalibration: `scripts/recalibrate.sh` = `scripts/anchor.sh` (one or two hand-taught squares, the rest +30 mm). `--grid` re-makes the camera grid, `--height` redoes the 4-corner touch.
+- Dashboard: the simulated board now shows the engine's move AT ONCE (`preview`), the real board catches up after the arm and the camera check; the human's move is pushed when YOLO sees it.
+- REMOVED (git history has it): WoodenPickPlace/PickPlace, camera steering, board map, trim, shift search, all teaching/test tools (center_teach, pawn_walk, teach_*, batch_test, camcal, autocal, ...), their scripts.
+- NOT done / needs the user: YOLO retrain for the demo viewpoint; black pieces (they face the robot, finger offset not taught); `BOARD_THICKNESS_MM` (graveyard height, estimate 25 mm); spare queens placement; VLM untested; a real game run.
+- 2026-11-10 (later): robot plays WHITE (`config.ROBOT_COLOR`); `BOARD_THICKNESS_MM = 20` (only the graveyard/spare height uses it); spare queens left blank on purpose (a promotion with no spare falls back to "play it by hand").
+  Robo/VLM (still untested on the real machine): `voice/brain.py` has a chess-aware, fact-bound system prompt; verdicts come from python-chess + Stockfish (`voice/verdicts.py`: blunder/mistake/inaccuracy/good/great,
+  illegal move = "foul" with the reason), the model only phrases them (events `human_move`, `illegal_move`; the last verdict is in the model's context for questions). Dashboard smoke test (`--dry-run`) starts and serves state + board.
+
+## 2026-11-13: TEMP_DX (-5 mm on every centre) REMOVED permanently (user: early-development offset). Anchor (`scripts/anchor.sh`): after each taught square the arm goes home, returns to it, Enter = keep / r = redo; four-anchor mode checks the taught distances (warns > 6 mm off ideal). Verifier: never replays a move whose destination already shows the piece; rank 1-2 source ghosts ignored. The pieces' finger offsets (shift_x/y, place_dx/dy in wooden_grasps.json) are still the OLD gripper's and need redoing.

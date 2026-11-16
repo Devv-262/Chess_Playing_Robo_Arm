@@ -29,6 +29,13 @@ class Engine:
             return fn(board, *args)
 
     def best_move(self, board: chess.Board, seconds=C.ENGINE_TIME_S) -> chess.Move:
+        """The robot only has spare QUEENS: an under-promotion is turned into a queen promotion."""
+        m = self._best_move(board, seconds)
+        if m.promotion and m.promotion != chess.QUEEN:
+            m = chess.Move(m.from_square, m.to_square, chess.QUEEN)
+        return m
+
+    def _best_move(self, board: chess.Board, seconds=C.ENGINE_TIME_S) -> chess.Move:
         """Stockfish's best move. Stockfish is deterministic (same position -> same move), so every game would open the same way. With
         ENGINE_VARIETY_CP > 0 it looks at the best few moves and picks randomly among those no worse than that many centipawns behind the
         best (nearly full strength, but different games). Forced lines and mates are never varied."""

@@ -81,6 +81,7 @@ class Conductor:
         self.mode = "paused"  # paused | playing
         self.phase = "starting"
         self.status = "Starting up..."
+        self.preview = None  # the robot's move being played (shown on the simulated board before the real board changes)
         self.help = None  # what the human must do: {"kind": ..., ...}
         self.busy = False
         self.eval = "0.00"
@@ -287,6 +288,7 @@ class Conductor:
                     self.emit("error", why=e)
             finally:
                 self.busy = False
+                self.preview = None
                 if self.s.board.fen() != self._saved_fen:  # keep data/board_state.json = the real board
                     self._saved_fen = self.s.board.fen()
                     try:
@@ -320,6 +322,7 @@ class Conductor:
                 if getattr(self, "_illegal_logged", None) != mv:
                     self._illegal_logged = mv
                     self.log(f"camera sees an illegal move: {mv} ({why})")
+                    self.emit("illegal_move", move=mv, why=why)
             if inf is not None:
                 san = b.san(inf.move)
                 before = self.eval
@@ -545,19 +548,22 @@ class Conductor:
         mover = chess.piece_name(self.s.board.piece_at(move.from_square).piece_type)
         self.emit("robot_move", san=san, victim=victim, piece=mover, src=chess.square_name(move.from_square),
                   dst=chess.square_name(move.to_square), castle=self.s.board.is_castling(move), eval=self.eval)
-        from chess_player.motion.pick_place import GraspFailed
+        from chess_player.motion.transfers import GraspFailed
         from chess_player.motion.ik import Unreachable
 
-        from chess_player.motion.pick_place import PieceDropped
+        from chess_player.motion.transfers import PieceDropped
 
+        self.preview = move  # the simulation shows the engine's move at once; the real board catches up when the arm is done and the camera agrees
         try:
             self.s.execute(move, recover=self.recover)
         except (Unreachable, GraspFailed, PieceDropped) as e:
+            self.preview = None
             self.log(f"{type(e).__name__}: {e}")
             self.help = {"kind": "robot_by_hand", "move": move.uci(), "san": san, "why": str(e)}
             self.say("need_help", f"I couldn't finish {san}. Please complete it by hand, then press 'Done'.")
             self.emit("need_help", san=san)
             return
+        self.preview = None
         self._refresh_eval()
         self.emit("robot_done", san=san, check=self.s.board.is_check(), eval=self.eval)
         if self.s.has_vision:
@@ -608,7 +614,7 @@ class Conductor:
         self.emit("pause")
 
     def job_new_game(self):
-        from chess_player.motion.pick_place import Slots
+        from chess_player.motion.transfers import Slots
 
         self.s.board.reset()
         self.san_before_edit = []
@@ -746,7 +752,7 @@ class Conductor:
 
     def job_manual(self, src, dst, sync=True):
         """Physical pick & place between any two squares (not a chess move)."""
-        from chess_player.motion.pick_place import GraspFailed, Transfer, obstacles_for
+        from chess_player.motion.transfers import GraspFailed, Transfer, obstacles_for
 
         s_sq, d_sq = chess.parse_square(src), chess.parse_square(dst)
         b = self.s.board
@@ -763,7 +769,7 @@ class Conductor:
         self.emit("manual", src=src, dst=dst)
         self.log(f"manual pick & place {piece.symbol()} {src} -> {dst}")
         self.s.parked = False
-        from chess_player.motion.pick_place import PieceDropped
+        from chess_player.motion.transfers import PieceDropped
 
         if self.s.watcher:
             self.s.watcher.paused = True
@@ -807,6 +813,7 @@ class Conductor:
         w = self.s.watcher
         return {
             "mode": self.mode, "phase": self.phase, "status": self.status, "help": self.help, "busy": self.busy,
+            "preview": self.preview.uci() if self.preview else None,
             "fen": b.fen(), "turn": "white" if b.turn else "black", "robot_color": self.robot_color,
             "moves": sans, "last_move": b.peek().uci() if b.move_stack else None, "eval": self.eval,
             "vision": (self.s.vision if self.s.has_vision else "off"), "yolo": self.yolo_kind is not None, "yolo_kind": self.yolo_kind,
@@ -862,6 +869,10 @@ class Conductor:
         b = self.s.board
         lm = b.peek() if b.move_stack else None
         arrows = []
+        if self.preview is not None and self.preview in b.legal_moves:  # simulation: the move the arm is playing right now
+            b = b.copy()
+            b.push(self.preview)
+            lm = self.preview
         if self.help and self.help.get("kind") == "robot_by_hand":
             m = chess.Move.from_uci(self.help["move"])
             arrows = [chess.svg.Arrow(m.from_square, m.to_square, color="#e5484d")]

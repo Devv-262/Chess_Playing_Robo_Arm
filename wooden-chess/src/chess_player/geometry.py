@@ -86,3 +86,20 @@ def fit_rigid(board_pts_mm, robot_pts_m):
     t = qc - R @ pc
     res = np.linalg.norm((P @ R.T + t) - Q, axis=1) * 1000
     return BoardToRobot(R, t, float(np.sqrt((res**2).mean()))), res
+
+
+def board_from_robot(T: BoardToRobot, p_robot_m):
+    """Inverse of BoardToRobot.__call__ (board mm x, y, z) for a robot-frame point in metres."""
+    x = y = 0.0
+    z = 0.0
+    for _ in range(4):  # z_plane makes the map depend on (x, y): iterate
+        dz = 0.0
+        if T.z_plane is not None:
+            dz = (T.z_plane[0] + T.z_plane[1] * (x - 105.0) + T.z_plane[2] * (y - 105.0)) / 1000.0
+        b = T.R.T @ (np.asarray(p_robot_m) - T.t - np.array([0.0, 0.0, dz])) * 1000.0
+        if T.A is not None:
+            xy = np.linalg.solve(T.A, b[:2] - T.b)
+        else:
+            xy = b[:2]
+        x, y, z = float(xy[0]), float(xy[1]), float(b[2])
+    return np.array([x, y, z])

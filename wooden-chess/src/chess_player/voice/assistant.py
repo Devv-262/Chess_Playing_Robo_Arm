@@ -15,6 +15,7 @@ import chess
 
 from chess_player import config as C
 from chess_player.game import state as GS
+from chess_player.voice import verdicts as V
 
 PIECE_WORDS = {"knight": "N", "night": "N", "bishop": "B", "rook": "R", "castle": "R", "queen": "Q", "king": "K",
                "pawn": ""}
@@ -106,6 +107,7 @@ class Assistant:
         self.thinking = False
         self._last_said = ("", 0.0)
         self.speaker = self.listener = self.brain = None
+        self.last_facts = ""  # the python-chess/Stockfish verdict on the last human move (or foul), given to the model as truth
         try:
             from chess_player.voice.audio import Speaker
 
@@ -153,6 +155,7 @@ class Assistant:
 
     def _quip(self, facts, ask, max_age_s=8.0):
         """One short spoken comment from the language model, in the background; dropped if it comes too late."""
+        self.last_facts = facts
         if self.brain is None or self.brain.status != "ready":
             return
         t0 = time.time()
@@ -185,13 +188,23 @@ class Assistant:
             elif kind == "robot_done":
                 self.say(line("robot_done_check" if d.get("check") else "robot_done"))
             elif kind == "human_move":
-                swing = d.get("swing_for_robot", 0)
-                # Only remark on big swings; ordinary moves get no comment (the board shows them).
-                if swing > 200:
+                # the verdict is python-chess + Stockfish (verdicts.py); the model only phrases it (quip), the canned line is the fallback
+                mover_swing = -d.get("swing_for_robot", 0)  # the swing is for the robot; the human is the mover
+                verdict = V.classify(mover_swing)
+                facts = V.human_move_facts(d["san"], mover_swing, d.get("better"), d.get("eval", ""))
+                self.last_facts = facts
+                if verdict in (V.BLUNDER, V.MISTAKE):
                     better = f" Better was {spoken_san(d['better'])}." if d.get("better") else ""
-                    self.say(line("human_blunder") + better)
-                elif swing < -100:
+                    self.say((line("human_blunder") if verdict == V.BLUNDER else "That was a mistake.") + better)
+                elif verdict == V.GREAT:
                     self.say(line("human_great"))
+                if verdict in (V.BLUNDER, V.MISTAKE, V.GREAT):
+                    self._quip(facts, "React to the human's move in one short sentence.", max_age_s=10.0)
+            elif kind == "illegal_move":
+                facts = V.illegal_facts(d["move"], d["why"])
+                self.last_facts = facts
+                self.say(f"That's a foul: {d['why']}. Please put it back.")
+                self._quip(facts, "Tell them it is a foul and why, in one short sentence.", max_age_s=10.0)
             elif kind == "found_piece":
                 self.say(line("found_piece", square=self._sq(d["square"])))
             elif kind == "need_help_manual":
@@ -333,7 +346,7 @@ class Assistant:
             pieces[color] = f"{len(items)} pieces: " + ", ".join(items)
         return (f"you (Robo) play {c.robot_color}; it is {'your' if b.turn == (c.robot_color == 'white') else 'the human'}'s "
                 f"turn; moves so far: {' '.join(st['moves'][-12:]) or 'none'}; Stockfish evaluation (White's view): "
-                f"{c.eval}; status: {c.status}. Position (from the game record, reliable): White has {pieces[chess.WHITE]}. "
+                f"{c.eval}; status: {c.status}. Facts about the last human move: {self.last_facts or 'none yet'}. Position (from the game record, reliable): White has {pieces[chess.WHITE]}. "
                 f"Black has {pieces[chess.BLACK]}.")
 
     def _answer(self, question):

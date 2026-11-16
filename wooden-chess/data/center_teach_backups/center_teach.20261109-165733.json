@@ -1,0 +1,1223 @@
+{
+ "h1": {
+  "piece": "*",
+  "square": "h1",
+  "when": "2026-11-09T15:27:03",
+  "joints": {
+   "shoulder_pan": 46.99,
+   "shoulder_lift": -10.9,
+   "elbow_flex": 45.05,
+   "wrist_flex": 63.16,
+   "wrist_roll": -88.84,
+   "gripper": 1.85
+  },
+  "tip_robot_mm": [
+   134.95,
+   -121.06,
+   36.94
+  ],
+  "tip_board_mm": [
+   232.21,
+   12.94,
+   16.35
+  ],
+  "square_centre_board_mm": [
+   225.0,
+   15.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 7.21,
+   "y": -2.06
+  },
+  "tip_height_above_board_mm": 16.35,
+  "gripper_pct": 1.85
+ },
+ "g1": {
+  "piece": "*",
+  "square": "g1",
+  "when": "2026-11-09T15:27:35",
+  "joints": {
+   "shoulder_pan": 36.88,
+   "shoulder_lift": -21.89,
+   "elbow_flex": 53.14,
+   "wrist_flex": 67.91,
+   "wrist_roll": -81.63,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   135.72,
+   -83.86,
+   40.92
+  ],
+  "tip_board_mm": [
+   196.41,
+   8.64,
+   19.42
+  ],
+  "square_centre_board_mm": [
+   195.0,
+   15.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 1.41,
+   "y": -6.36
+  },
+  "tip_height_above_board_mm": 19.42,
+  "gripper_pct": 1.71
+ },
+ "f1": {
+  "piece": "*",
+  "square": "f1",
+  "when": "2026-11-09T15:54:24",
+  "joints": {
+   "shoulder_pan": 24.04,
+   "shoulder_lift": -35.16,
+   "elbow_flex": 64.4,
+   "wrist_flex": 65.36,
+   "wrist_roll": -88.92,
+   "gripper": 1.85
+  },
+  "tip_robot_mm": [
+   142.91,
+   -54.65,
+   36.51
+  ],
+  "tip_board_mm": [
+   167.61,
+   11.24,
+   13.99
+  ],
+  "square_centre_board_mm": [
+   165.0,
+   15.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 2.61,
+   "y": -3.76
+  },
+  "tip_height_above_board_mm": 13.99,
+  "gripper_pct": 1.85
+ },
+ "e1": {
+  "piece": "*",
+  "square": "e1",
+  "when": "2026-11-09T15:55:01",
+  "joints": {
+   "shoulder_pan": 10.15,
+   "shoulder_lift": -43.6,
+   "elbow_flex": 71.69,
+   "wrist_flex": 66.24,
+   "wrist_roll": -91.3,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   140.41,
+   -24.09,
+   30.58
+  ],
+  "tip_board_mm": [
+   138.9,
+   4.31,
+   7.47
+  ],
+  "square_centre_board_mm": [
+   135.0,
+   15.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 3.9,
+   "y": -10.69
+  },
+  "tip_height_above_board_mm": 7.47,
+  "gripper_pct": 1.71
+ },
+ "d1": {
+  "piece": "*",
+  "square": "d1",
+  "when": "2026-11-09T15:55:19",
+  "joints": {
+   "shoulder_pan": -5.58,
+   "shoulder_lift": -34.46,
+   "elbow_flex": 64.75,
+   "wrist_flex": 69.67,
+   "wrist_roll": -108.88,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   144.91,
+   3.83,
+   34.73
+  ],
+  "tip_board_mm": [
+   111.45,
+   4.88,
+   10.75
+  ],
+  "square_centre_board_mm": [
+   105.0,
+   15.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 6.45,
+   "y": -10.12
+  },
+  "tip_height_above_board_mm": 10.75,
+  "gripper_pct": 1.71
+ },
+ "c1": {
+  "piece": "*",
+  "square": "c1",
+  "when": "2026-11-09T15:57:13",
+  "joints": {
+   "shoulder_pan": -22.2,
+   "shoulder_lift": -27.25,
+   "elbow_flex": 58.42,
+   "wrist_flex": 70.37,
+   "wrist_roll": -128.75,
+   "gripper": 1.85
+  },
+  "tip_robot_mm": [
+   150.43,
+   35.51,
+   38.17
+  ],
+  "tip_board_mm": [
+   80.3,
+   5.86,
+   13.17
+  ],
+  "square_centre_board_mm": [
+   75.0,
+   15.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 5.3,
+   "y": -9.14
+  },
+  "tip_height_above_board_mm": 13.17,
+  "gripper_pct": 1.85
+ },
+ "b1": {
+  "piece": "*",
+  "square": "b1",
+  "when": "2026-11-09T15:57:25",
+  "joints": {
+   "shoulder_pan": -36.0,
+   "shoulder_lift": -17.58,
+   "elbow_flex": 49.45,
+   "wrist_flex": 70.99,
+   "wrist_roll": -130.07,
+   "gripper": 1.85
+  },
+  "tip_robot_mm": [
+   152.08,
+   68.24,
+   41.31
+  ],
+  "tip_board_mm": [
+   48.68,
+   2.99,
+   15.46
+  ],
+  "square_centre_board_mm": [
+   45.0,
+   15.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 3.68,
+   "y": -12.01
+  },
+  "tip_height_above_board_mm": 15.46,
+  "gripper_pct": 1.85
+ },
+ "a1": {
+  "piece": "*",
+  "square": "a1",
+  "when": "2026-11-09T15:57:34",
+  "joints": {
+   "shoulder_pan": -42.86,
+   "shoulder_lift": -12.31,
+   "elbow_flex": 44.62,
+   "wrist_flex": 66.77,
+   "wrist_roll": -141.23,
+   "gripper": 1.85
+  },
+  "tip_robot_mm": [
+   161.64,
+   93.07,
+   40.88
+  ],
+  "tip_board_mm": [
+   23.62,
+   8.63,
+   13.99
+  ],
+  "square_centre_board_mm": [
+   15.0,
+   15.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 8.62,
+   "y": -6.37
+  },
+  "tip_height_above_board_mm": 13.99,
+  "gripper_pct": 1.85
+ },
+ "h2": {
+  "piece": "*",
+  "square": "h2",
+  "when": "2026-11-09T15:57:48",
+  "joints": {
+   "shoulder_pan": 37.23,
+   "shoulder_lift": -1.67,
+   "elbow_flex": 30.99,
+   "wrist_flex": 67.82,
+   "wrist_roll": -61.32,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   166.32,
+   -116.37,
+   47.16
+  ],
+  "tip_board_mm": [
+   223.07,
+   42.69,
+   24.96
+  ],
+  "square_centre_board_mm": [
+   225.0,
+   45.0
+  ],
+  "offset_from_centre_mm": {
+   "x": -1.93,
+   "y": -2.31
+  },
+  "tip_height_above_board_mm": 24.96,
+  "gripper_pct": 1.71
+ },
+ "g2": {
+  "piece": "*",
+  "square": "g2",
+  "when": "2026-11-09T15:58:02",
+  "joints": {
+   "shoulder_pan": 28.97,
+   "shoulder_lift": -5.19,
+   "elbow_flex": 36.35,
+   "wrist_flex": 70.99,
+   "wrist_roll": -69.93,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   165.28,
+   -84.14,
+   44.57
+  ],
+  "tip_board_mm": [
+   192.47,
+   37.08,
+   21.66
+  ],
+  "square_centre_board_mm": [
+   195.0,
+   45.0
+  ],
+  "offset_from_centre_mm": {
+   "x": -2.53,
+   "y": -7.92
+  },
+  "tip_height_above_board_mm": 21.66,
+  "gripper_pct": 1.71
+ },
+ "f2": {
+  "piece": "*",
+  "square": "f2",
+  "when": "2026-11-09T15:58:14",
+  "joints": {
+   "shoulder_pan": 20.09,
+   "shoulder_lift": -14.86,
+   "elbow_flex": 47.25,
+   "wrist_flex": 64.57,
+   "wrist_roll": -77.41,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   172.58,
+   -61.14,
+   40.41
+  ],
+  "tip_board_mm": [
+   169.58,
+   40.66,
+   16.62
+  ],
+  "square_centre_board_mm": [
+   165.0,
+   45.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 4.58,
+   "y": -4.34
+  },
+  "tip_height_above_board_mm": 16.62,
+  "gripper_pct": 1.71
+ },
+ "e2": {
+  "piece": "*",
+  "square": "e2",
+  "when": "2026-11-09T15:58:35",
+  "joints": {
+   "shoulder_pan": 7.69,
+   "shoulder_lift": -19.87,
+   "elbow_flex": 52.88,
+   "wrist_flex": 63.6,
+   "wrist_roll": -85.05,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   174.54,
+   -28.68,
+   37.52
+  ],
+  "tip_board_mm": [
+   138.35,
+   37.87,
+   12.88
+  ],
+  "square_centre_board_mm": [
+   135.0,
+   45.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 3.35,
+   "y": -7.13
+  },
+  "tip_height_above_board_mm": 12.88,
+  "gripper_pct": 1.71
+ },
+ "d2": {
+  "piece": "*",
+  "square": "d2",
+  "when": "2026-11-09T15:58:50",
+  "joints": {
+   "shoulder_pan": -4.7,
+   "shoulder_lift": -17.14,
+   "elbow_flex": 47.16,
+   "wrist_flex": 70.37,
+   "wrist_roll": -98.77,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   175.95,
+   1.09,
+   45.56
+  ],
+  "tip_board_mm": [
+   109.45,
+   35.38,
+   20.14
+  ],
+  "square_centre_board_mm": [
+   105.0,
+   45.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 4.45,
+   "y": -9.62
+  },
+  "tip_height_above_board_mm": 20.14,
+  "gripper_pct": 1.71
+ },
+ "c2": {
+  "piece": "*",
+  "square": "c2",
+  "when": "2026-11-09T15:59:01",
+  "joints": {
+   "shoulder_pan": -17.1,
+   "shoulder_lift": -10.81,
+   "elbow_flex": 43.91,
+   "wrist_flex": 70.02,
+   "wrist_roll": -114.15,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   178.12,
+   30.8,
+   40.0
+  ],
+  "tip_board_mm": [
+   80.9,
+   33.07,
+   13.78
+  ],
+  "square_centre_board_mm": [
+   75.0,
+   45.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 5.9,
+   "y": -11.93
+  },
+  "tip_height_above_board_mm": 13.78,
+  "gripper_pct": 1.71
+ },
+ "b2": {
+  "piece": "*",
+  "square": "b2",
+  "when": "2026-11-09T15:59:24",
+  "joints": {
+   "shoulder_pan": -27.74,
+   "shoulder_lift": -2.9,
+   "elbow_flex": 32.4,
+   "wrist_flex": 74.24,
+   "wrist_roll": -129.27,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   187.23,
+   61.14,
+   47.62
+  ],
+  "tip_board_mm": [
+   50.4,
+   37.84,
+   20.25
+  ],
+  "square_centre_board_mm": [
+   45.0,
+   45.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 5.4,
+   "y": -7.16
+  },
+  "tip_height_above_board_mm": 20.25,
+  "gripper_pct": 1.71
+ },
+ "a2": {
+  "piece": "*",
+  "square": "a2",
+  "when": "2026-11-09T15:59:31",
+  "joints": {
+   "shoulder_pan": -38.9,
+   "shoulder_lift": 3.6,
+   "elbow_flex": 25.27,
+   "wrist_flex": 74.24,
+   "wrist_roll": -134.64,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   186.06,
+   96.38,
+   46.68
+  ],
+  "tip_board_mm": [
+   16.9,
+   31.75,
+   18.54
+  ],
+  "square_centre_board_mm": [
+   15.0,
+   45.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 1.9,
+   "y": -13.25
+  },
+  "tip_height_above_board_mm": 18.54,
+  "gripper_pct": 1.71
+ },
+ "h3": {
+  "piece": "*",
+  "square": "h3",
+  "when": "2026-11-09T16:16:07",
+  "joints": {
+   "shoulder_pan": 33.54,
+   "shoulder_lift": 9.05,
+   "elbow_flex": 15.08,
+   "wrist_flex": 70.55,
+   "wrist_roll": -65.27,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   196.53,
+   -127.56,
+   54.4
+  ],
+  "tip_board_mm": [
+   229.36,
+   73.43,
+   31.01
+  ],
+  "square_centre_board_mm": [
+   225.0,
+   75.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 4.36,
+   "y": -1.57
+  },
+  "tip_height_above_board_mm": 31.01,
+  "gripper_pct": 1.71
+ },
+ "g3": {
+  "piece": "*",
+  "square": "g3",
+  "when": "2026-11-09T16:16:34",
+  "joints": {
+   "shoulder_pan": 25.71,
+   "shoulder_lift": 8.62,
+   "elbow_flex": 14.9,
+   "wrist_flex": 76.35,
+   "wrist_roll": -67.03,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   200.0,
+   -96.68,
+   56.58
+  ],
+  "tip_board_mm": [
+   199.29,
+   72.53,
+   32.3
+  ],
+  "square_centre_board_mm": [
+   195.0,
+   75.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 4.29,
+   "y": -2.47
+  },
+  "tip_height_above_board_mm": 32.3,
+  "gripper_pct": 1.71
+ },
+ "f3": {
+  "piece": "*",
+  "square": "f3",
+  "when": "2026-11-09T16:16:55",
+  "joints": {
+   "shoulder_pan": 16.84,
+   "shoulder_lift": 4.66,
+   "elbow_flex": 20.44,
+   "wrist_flex": 76.88,
+   "wrist_roll": -79.69,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   202.02,
+   -65.19,
+   55.44
+  ],
+  "tip_board_mm": [
+   168.93,
+   69.99,
+   30.32
+  ],
+  "square_centre_board_mm": [
+   165.0,
+   75.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 3.93,
+   "y": -5.01
+  },
+  "tip_height_above_board_mm": 30.32,
+  "gripper_pct": 1.71
+ },
+ "e3": {
+  "piece": "*",
+  "square": "e3",
+  "when": "2026-11-09T16:17:33",
+  "joints": {
+   "shoulder_pan": 7.25,
+   "shoulder_lift": -13.27,
+   "elbow_flex": 39.43,
+   "wrist_flex": 64.48,
+   "wrist_roll": -87.34,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   206.91,
+   -36.05,
+   55.93
+  ],
+  "tip_board_mm": [
+   140.37,
+   70.6,
+   29.89
+  ],
+  "square_centre_board_mm": [
+   135.0,
+   75.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 5.37,
+   "y": -4.4
+  },
+  "tip_height_above_board_mm": 29.89,
+  "gripper_pct": 1.71
+ },
+ "d3": {
+  "piece": "*",
+  "square": "d3",
+  "when": "2026-11-09T16:17:39",
+  "joints": {
+   "shoulder_pan": -3.3,
+   "shoulder_lift": -9.85,
+   "elbow_flex": 39.25,
+   "wrist_flex": 64.57,
+   "wrist_roll": -99.56,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   208.78,
+   -4.67,
+   48.07
+  ],
+  "tip_board_mm": [
+   110.33,
+   67.67,
+   21.22
+  ],
+  "square_centre_board_mm": [
+   105.0,
+   75.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 5.33,
+   "y": -7.33
+  },
+  "tip_height_above_board_mm": 21.22,
+  "gripper_pct": 1.71
+ },
+ "c3": {
+  "piece": "*",
+  "square": "c3",
+  "when": "2026-11-09T16:17:56",
+  "joints": {
+   "shoulder_pan": -13.14,
+   "shoulder_lift": 0.0,
+   "elbow_flex": 24.84,
+   "wrist_flex": 76.0,
+   "wrist_roll": -109.05,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   210.77,
+   24.48,
+   57.32
+  ],
+  "tip_board_mm": [
+   81.91,
+   65.88,
+   29.67
+  ],
+  "square_centre_board_mm": [
+   75.0,
+   75.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 6.91,
+   "y": -9.12
+  },
+  "tip_height_above_board_mm": 29.67,
+  "gripper_pct": 1.71
+ },
+ "b3": {
+  "piece": "*",
+  "square": "b3",
+  "when": "2026-11-09T16:18:13",
+  "joints": {
+   "shoulder_pan": -22.55,
+   "shoulder_lift": 4.84,
+   "elbow_flex": 21.05,
+   "wrist_flex": 74.15,
+   "wrist_roll": -120.13,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   217.05,
+   54.97,
+   52.71
+  ],
+  "tip_board_mm": [
+   52.02,
+   67.42,
+   24.05
+  ],
+  "square_centre_board_mm": [
+   45.0,
+   75.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 7.02,
+   "y": -7.58
+  },
+  "tip_height_above_board_mm": 24.05,
+  "gripper_pct": 1.71
+ },
+ "a3": {
+  "piece": "*",
+  "square": "a3",
+  "when": "2026-11-09T16:18:28",
+  "joints": {
+   "shoulder_pan": -32.31,
+   "shoulder_lift": 17.14,
+   "elbow_flex": 4.44,
+   "wrist_flex": 80.22,
+   "wrist_roll": -123.03,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   223.15,
+   92.49,
+   54.51
+  ],
+  "tip_board_mm": [
+   15.24,
+   68.07,
+   24.68
+  ],
+  "square_centre_board_mm": [
+   15.0,
+   75.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 0.24,
+   "y": -6.93
+  },
+  "tip_height_above_board_mm": 24.68,
+  "gripper_pct": 1.71
+ },
+ "h4": {
+  "piece": "*",
+  "square": "h4",
+  "when": "2026-11-09T16:18:51",
+  "joints": {
+   "shoulder_pan": 30.02,
+   "shoulder_lift": 16.44,
+   "elbow_flex": 5.93,
+   "wrist_flex": 66.51,
+   "wrist_roll": -66.77,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   228.31,
+   -136.12,
+   54.02
+  ],
+  "tip_board_mm": [
+   233.15,
+   104.99,
+   29.31
+  ],
+  "square_centre_board_mm": [
+   225.0,
+   105.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 8.15,
+   "y": -0.01
+  },
+  "tip_height_above_board_mm": 29.31,
+  "gripper_pct": 1.71
+ },
+ "g4": {
+  "piece": "*",
+  "square": "g4",
+  "when": "2026-11-09T16:19:00",
+  "joints": {
+   "shoulder_pan": 23.16,
+   "shoulder_lift": 16.44,
+   "elbow_flex": 5.58,
+   "wrist_flex": 71.52,
+   "wrist_roll": -73.1,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   232.99,
+   -106.16,
+   53.93
+  ],
+  "tip_board_mm": [
+   203.85,
+   105.26,
+   28.3
+  ],
+  "square_centre_board_mm": [
+   195.0,
+   105.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 8.85,
+   "y": 0.26
+  },
+  "tip_height_above_board_mm": 28.3,
+  "gripper_pct": 1.71
+ },
+ "f4": {
+  "piece": "*",
+  "square": "f4",
+  "when": "2026-11-09T16:19:14",
+  "joints": {
+   "shoulder_pan": 15.34,
+   "shoulder_lift": 14.07,
+   "elbow_flex": 9.27,
+   "wrist_flex": 73.36,
+   "wrist_roll": -80.31,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   234.26,
+   -73.74,
+   52.71
+  ],
+  "tip_board_mm": [
+   172.71,
+   101.88,
+   26.26
+  ],
+  "square_centre_board_mm": [
+   165.0,
+   105.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 7.71,
+   "y": -3.12
+  },
+  "tip_height_above_board_mm": 26.26,
+  "gripper_pct": 1.71
+ },
+ "e4": {
+  "piece": "*",
+  "square": "e4",
+  "when": "2026-11-09T16:19:24",
+  "joints": {
+   "shoulder_pan": 5.58,
+   "shoulder_lift": 12.84,
+   "elbow_flex": 10.95,
+   "wrist_flex": 73.71,
+   "wrist_roll": -91.03,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   240.91,
+   -38.77,
+   52.65
+  ],
+  "tip_board_mm": [
+   138.34,
+   103.34,
+   25.05
+  ],
+  "square_centre_board_mm": [
+   135.0,
+   105.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 3.34,
+   "y": -1.66
+  },
+  "tip_height_above_board_mm": 25.05,
+  "gripper_pct": 1.71
+ },
+ "d4": {
+  "piece": "*",
+  "square": "d4",
+  "when": "2026-11-09T16:55:47",
+  "joints": {
+   "shoulder_pan": -3.38,
+   "shoulder_lift": 10.73,
+   "elbow_flex": 12.97,
+   "wrist_flex": 73.98,
+   "wrist_roll": -98.68,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   241.07,
+   -6.67,
+   54.36
+  ],
+  "tip_board_mm": [
+   107.58,
+   99.07,
+   26.0
+  ],
+  "square_centre_board_mm": [
+   105.0,
+   105.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 2.58,
+   "y": -5.93
+  },
+  "tip_height_above_board_mm": 26.0,
+  "gripper_pct": 1.71
+ },
+ "c4": {
+  "piece": "*",
+  "square": "c4",
+  "when": "2026-11-09T16:56:00",
+  "joints": {
+   "shoulder_pan": -11.21,
+   "shoulder_lift": 18.55,
+   "elbow_flex": 3.56,
+   "wrist_flex": 80.92,
+   "wrist_roll": -112.75,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   241.87,
+   20.48,
+   52.38
+  ],
+  "tip_board_mm": [
+   81.56,
+   95.96,
+   23.35
+  ],
+  "square_centre_board_mm": [
+   75.0,
+   105.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 6.56,
+   "y": -9.04
+  },
+  "tip_height_above_board_mm": 23.35,
+  "gripper_pct": 1.71
+ },
+ "b4": {
+  "piece": "*",
+  "square": "b4",
+  "when": "2026-11-09T16:56:11",
+  "joints": {
+   "shoulder_pan": -20.0,
+   "shoulder_lift": 23.03,
+   "elbow_flex": -5.58,
+   "wrist_flex": 84.62,
+   "wrist_roll": -122.77,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   248.21,
+   53.23,
+   58.49
+  ],
+  "tip_board_mm": [
+   49.19,
+   97.69,
+   28.38
+  ],
+  "square_centre_board_mm": [
+   45.0,
+   105.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 4.19,
+   "y": -7.31
+  },
+  "tip_height_above_board_mm": 28.38,
+  "gripper_pct": 1.71
+ },
+ "a4": {
+  "piece": "*",
+  "square": "a4",
+  "when": "2026-11-09T16:56:16",
+  "joints": {
+   "shoulder_pan": -26.86,
+   "shoulder_lift": 28.04,
+   "elbow_flex": -11.38,
+   "wrist_flex": 84.62,
+   "wrist_roll": -123.03,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   250.29,
+   81.33,
+   54.46
+  ],
+  "tip_board_mm": [
+   22.14,
+   95.57,
+   23.6
+  ],
+  "square_centre_board_mm": [
+   15.0,
+   105.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 7.14,
+   "y": -9.43
+  },
+  "tip_height_above_board_mm": 23.6,
+  "gripper_pct": 1.71
+ },
+ "h5": {
+  "piece": "*",
+  "square": "h5",
+  "when": "2026-11-09T16:56:43",
+  "joints": {
+   "shoulder_pan": 26.15,
+   "shoulder_lift": 33.23,
+   "elbow_flex": -22.2,
+   "wrist_flex": 76.88,
+   "wrist_roll": -72.04,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   262.71,
+   -139.77,
+   62.23
+  ],
+  "tip_board_mm": [
+   231.62,
+   138.72,
+   35.95
+  ],
+  "square_centre_board_mm": [
+   225.0,
+   135.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 6.62,
+   "y": 3.72
+  },
+  "tip_height_above_board_mm": 35.95,
+  "gripper_pct": 1.71
+ },
+ "g5": {
+  "piece": "*",
+  "square": "g5",
+  "when": "2026-11-09T16:56:47",
+  "joints": {
+   "shoulder_pan": 18.59,
+   "shoulder_lift": 27.69,
+   "elbow_flex": -12.79,
+   "wrist_flex": 76.53,
+   "wrist_roll": -78.02,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   264.24,
+   -101.6,
+   59.34
+  ],
+  "tip_board_mm": [
+   195.0,
+   134.72,
+   32.1
+  ],
+  "square_centre_board_mm": [
+   195.0,
+   135.0
+  ],
+  "offset_from_centre_mm": {
+   "x": -0.0,
+   "y": -0.28
+  },
+  "tip_height_above_board_mm": 32.1,
+  "gripper_pct": 1.71
+ },
+ "f5": {
+  "piece": "*",
+  "square": "f5",
+  "when": "2026-11-09T16:56:53",
+  "joints": {
+   "shoulder_pan": 12.35,
+   "shoulder_lift": 26.55,
+   "elbow_flex": -8.84,
+   "wrist_flex": 76.53,
+   "wrist_roll": -81.45,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   265.55,
+   -73.39,
+   53.67
+  ],
+  "tip_board_mm": [
+   168.0,
+   131.78,
+   25.71
+  ],
+  "square_centre_board_mm": [
+   165.0,
+   135.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 3.0,
+   "y": -3.22
+  },
+  "tip_height_above_board_mm": 25.71,
+  "gripper_pct": 1.71
+ },
+ "e5": {
+  "piece": "*",
+  "square": "e5",
+  "when": "2026-11-09T16:57:11",
+  "joints": {
+   "shoulder_pan": 6.81,
+   "shoulder_lift": 18.9,
+   "elbow_flex": 3.03,
+   "wrist_flex": 67.3,
+   "wrist_roll": -86.81,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   272.78,
+   -51.41,
+   53.04
+  ],
+  "tip_board_mm": [
+   146.0,
+   135.59,
+   24.22
+  ],
+  "square_centre_board_mm": [
+   135.0,
+   135.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 11.0,
+   "y": 0.59
+  },
+  "tip_height_above_board_mm": 24.22,
+  "gripper_pct": 1.71
+ },
+ "d5": {
+  "piece": "*",
+  "square": "d5",
+  "when": "2026-11-09T16:57:20",
+  "joints": {
+   "shoulder_pan": -1.01,
+   "shoulder_lift": 25.58,
+   "elbow_flex": -3.74,
+   "wrist_flex": 73.63,
+   "wrist_roll": -95.43,
+   "gripper": 1.71
+  },
+  "tip_robot_mm": [
+   273.09,
+   -18.63,
+   45.02
+  ],
+  "tip_board_mm": [
+   114.84,
+   130.94,
+   15.43
+  ],
+  "square_centre_board_mm": [
+   105.0,
+   135.0
+  ],
+  "offset_from_centre_mm": {
+   "x": 9.84,
+   "y": -4.06
+  },
+  "tip_height_above_board_mm": 15.43,
+  "gripper_pct": 1.71
+ }
+}

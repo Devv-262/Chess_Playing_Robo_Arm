@@ -20,6 +20,11 @@ def _colour(sym):
     return "w" if sym.isupper() else "b"
 
 
+def _colour_of(board, sq):
+    p = board.piece_at(sq)
+    return None if p is None else ("w" if p.color else "b")
+
+
 def occupancy(board: chess.Board):
     return {sq: (None if board.piece_at(sq) is None else ("w" if board.piece_at(sq).color else "b")) for sq in chess.SQUARES}
 
@@ -64,6 +69,9 @@ class MoveVerifier:
                     continue
                 if e_a[sq] is not None and oa is None and hidden_rank:
                     continue  # a pawn on rank 1-2 hidden by the tall piece behind it: cannot judge
+                if e_a[sq] is None and hidden_rank and oa == _colour_of(board_before, move.from_square) and sq == move.from_square \
+                        and after[move.to_square] == oa:
+                    continue  # source on rank 1-2 still reads 'occupied' (a tall piece behind it bleeds onto it) but the destination holds the piece: moved
                 problems.append((sq, e_a[sq], oa))
             elif UNSURE not in (ob, oa) and ob != oa:
                 if (ob is None or oa is None) and hidden_rank:

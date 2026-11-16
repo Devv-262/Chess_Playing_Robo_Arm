@@ -440,7 +440,7 @@ function render(s) {
   $("syncChip").textContent = s.seen_age == null ? "camera off" : nd ? `${nd} differ` : "in sync";
   $("syncChip").className = "chip " + (s.seen_age == null ? "warn" : nd ? "warn" : "on");
   $("syncTxt").title = nd ? "red squares on the board: the camera sees something else there: " + s.seen_diff.join(" ") : "";
-  const key = s.fen + JSON.stringify(s.help) + (s.seen_diff || []).join(",");
+  const key = s.fen + (s.preview || "") + JSON.stringify(s.help) + (s.seen_diff || []).join(",");
   if (key !== boardKey) { boardKey = key; $("board").src = "/board.svg?t=" + Date.now(); }
   $("evalText").textContent = s.eval; $("evalWhite").style.height = evalPct(s.eval) + "%";
   $("turnText").textContent = (s.turn === s.robot_color ? "Robot" : "You") + " to move (" + s.turn + ")";

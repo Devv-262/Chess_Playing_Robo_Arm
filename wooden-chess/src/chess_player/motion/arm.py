@@ -140,7 +140,15 @@ class Arm(_Base):
         }
         self.bus = FeetechMotorsBus(port, motors, calibration=cal)
         self.lock = threading.RLock()  # the UI thread may freeze / release the arm while the worker moves it
-        self.bus.connect(handshake=True)
+        try:
+            self.bus.connect(handshake=True)
+        except RuntimeError:  # a motor stuck holding torque (wrist roll, overload) does not answer: free it and retry once
+            from lerobot.motors.feetech.tables import STS_SMS_SERIES_CONTROL_TABLE as _T
+            ph = self.bus.port_handler
+            ph.openPort(); ph.setBaudRate(self.bus.default_baudrate)
+            self.bus._write(*_T["Torque_Enable"], self.bus.motors["wrist_roll"].id, 0, num_retry=3, raise_on_error=False)
+            ph.closePort()
+            self.bus.connect(handshake=True)
         # Hold the present position before enabling torque so nothing jumps.
         present = self.bus.sync_read("Present_Position", normalize=False)
         self.bus.sync_write("Goal_Position", present, normalize=False)
@@ -172,6 +180,8 @@ class Arm(_Base):
         if not self.torque_on:  # torque was switched off: re-engage where the arm is, then continue
             self.hold()
             return
+        if "gripper" in goal:  # never close the jaws fully: the plastic on the finger bends (C.GRIPPER_MIN_PCT)
+            goal = {**goal, "gripper": max(float(goal["gripper"]), C.GRIPPER_MIN_PCT)}
         corr = self.correction(goal)
         cmd = {j: goal[j] + corr[j] for j in goal}
         with self.lock:

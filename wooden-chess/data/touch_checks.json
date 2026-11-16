@@ -1,0 +1,44 @@
+[
+ {
+  "when": "2026-11-09T16:52:55",
+  "square": "e4",
+  "joints": {
+   "shoulder_pan": 5.32,
+   "shoulder_lift": 9.58,
+   "elbow_flex": 15.96,
+   "wrist_flex": 70.46,
+   "wrist_roll": -86.37
+  },
+  "tip_board_mm": [
+   137.25,
+   100.3,
+   23.3
+  ],
+  "tip_robot_mm": [
+   238.05,
+   -37.15,
+   50.79
+  ]
+ },
+ {
+  "when": "2026-11-09T16:54:29",
+  "square": "e7",
+  "joints": {
+   "shoulder_pan": 4.62,
+   "shoulder_lift": 50.64,
+   "elbow_flex": -44.44,
+   "wrist_flex": 76.0,
+   "wrist_roll": -94.46
+  },
+  "tip_board_mm": [
+   141.28,
+   196.74,
+   18.11
+  ],
+  "tip_robot_mm": [
+   336.31,
+   -55.61,
+   49.86
+  ]
+ }
+]

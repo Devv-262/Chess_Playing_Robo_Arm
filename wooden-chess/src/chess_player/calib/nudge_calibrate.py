@@ -30,7 +30,7 @@ import numpy as np
 from chess_player import config as C
 from chess_player.geometry import BoardToRobot, square_center_mm
 from chess_player.motion.arm import Arm, FakeArm, look_pose
-from chess_player.motion.ik import IK, solve_or_raise
+from chess_player.motion.ik import IK, solve_high, solve_or_raise
 
 MAX_NUDGE_MM = 45.0
 MIN_HEIGHT_MM = 12.0
@@ -113,6 +113,7 @@ def fit_similarity(P, Cmd):
     return A, b, res
 
 
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--squares", nargs="+", default=DEFAULT_SQUARES)
@@ -138,11 +139,24 @@ def main():
                 break
             xy0 = square_center_mm(chess.parse_square(name))
             off = np.zeros(2)
-            hi = solve_or_raise(ik, T(*xy0, C.Z_SAFE), q, what=f"{name} high")
-            arm.move_to({**dict(zip(C.ARM_JOINTS, hi)), "gripper": 0.0})
-            arm.settle()
-            lo = solve_or_raise(ik, T(*xy0, a.height), hi, C.GRASP_MAX_TILT, what=f"{name} low")
-            arm.move_to(dict(zip(C.ARM_JOINTS, lo)), C.DESCEND_S)
+            try:
+                hi = solve_high(ik, T, xy0, q, f"{name} high")
+                arm.move_to({**dict(zip(C.ARM_JOINTS, hi)), "gripper": 0.0})
+                arm.settle()
+            except Exception as e:  # never abort the whole calibration for one travel pose: go straight to the hover pose
+                print(f"   (no travel pose above {name}: {e}; going straight to the hover height)")
+                hi = q
+            lo = None
+            for tilt in (C.GRASP_MAX_TILT, 90.0):
+                try:
+                    lo = solve_or_raise(ik, T(*xy0, a.height), hi, tilt, what=f"{name} low")
+                    break
+                except Exception as e:
+                    err_low = e
+            if lo is None:
+                print(f"   cannot reach {name} at {a.height:.0f} mm ({err_low}): skipping it")
+                continue
+            arm.move_to({**dict(zip(C.ARM_JOINTS, lo))}, C.DESCEND_S)
             arm.settle()
             print(f"\n{name}: tip is {a.height:.0f} mm above where {name}'s centre should be.")
             print("   look straight down; move it with e.g. 'd3 w2' (right 3, away 2), empty line = accept, "
@@ -191,8 +205,11 @@ def main():
                 arm.settle(iters=2)
                 print(f"   moved: nudge is now ({off[0]:+.0f}, {off[1]:+.0f}) mm")
             # back up before the next square
-            q = solve_or_raise(ik, T(*(xy0 + off), C.Z_SAFE), q, what=f"{name} lift")
-            arm.move_to(dict(zip(C.ARM_JOINTS, q)), C.DESCEND_S)
+            try:
+                q = solve_high(ik, T, xy0 + off, q, f"{name} lift")
+                arm.move_to(dict(zip(C.ARM_JOINTS, q)), C.DESCEND_S)
+            except Exception as e:  # stay where we are: the next square's travel pose starts from here
+                print(f"   (could not lift above {name}: {e})")
 
         if len(true_pts) >= 4:
             A, b, res = fit_similarity(true_pts, cmd_pts)

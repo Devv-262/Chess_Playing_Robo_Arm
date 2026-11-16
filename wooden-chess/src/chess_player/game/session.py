@@ -14,8 +14,8 @@ from chess_player.game import state
 from chess_player.game.engine import Engine
 from chess_player.geometry import BoardToRobot, square_center_mm
 from chess_player.motion.ik import IK, Unreachable
-from chess_player.motion.pick_place import MoveNotVerified, PickPlace, Slots, Transfer
-from chess_player.motion.wooden_pick_place import WoodenPickPlace
+from chess_player.motion.simple_pick_place import SimplePickPlace
+from chess_player.motion.transfers import MoveNotVerified, Slots, Transfer
 
 
 class Session:
@@ -36,7 +36,7 @@ class Session:
 
             self.arm = Arm()
             T = BoardToRobot.load()
-        self.pp = (WoodenPickPlace if C.USE_RECIPE_GRASP else PickPlace)(self.arm, IK(), T, verify_grasp=not dry_run, log=log)
+        self.pp = SimplePickPlace(self.arm, IK(), T, log=log)  # the same motion as scripts/move.sh
         self.slots = Slots(T)
         self.cam = None  # wrist camera (fallback vision)
         self.ext = None  # fixed third-person camera (main vision when its corners are calibrated)
@@ -50,10 +50,6 @@ class Session:
 
                 try:
                     self.ext = ExtCamera()
-                    if hasattr(self.pp, "locator"):  # centre every pick on where the piece really stands (arm at home = out of view)
-                        from chess_player.vision.piece_locator import PieceLocator
-
-                        self.pp.locator = PieceLocator(self.ext, log=log)
                     if self.vision == "yolo":
                         self.watcher = BoardWatcher(self.ext)
                 except RuntimeError as e:
@@ -75,10 +71,6 @@ class Session:
 
                 self.verify_cam = ExtCamera()
                 self._own_verify_cam = True
-                if hasattr(self.pp, "locator") and self.pp.locator is None:
-                    from chess_player.vision.piece_locator import PieceLocator
-
-                    self.pp.locator = PieceLocator(self.verify_cam, log=log)
             except RuntimeError as e:
                 log(f"move verification camera unavailable ({e}): moves will NOT be checked by the camera")
         if self.verify_cam is not None and not dry_run and C.VERIFY_MOVES:
@@ -156,6 +148,11 @@ class Session:
         stay = state.score_position(self.board, dets)
         if inf.move is not None and inf.score > stay + 1.0:
             return inf
+        # type-blind fallback: a misread piece TYPE on the moved piece must not hide a move that is plainly there by colour
+        occ = state.infer_move_occ(self.board, dets)
+        if occ is not None:
+            self.log(f"move read by occupancy/colour (piece type unsure): {self.board.san(occ[0])}")
+            return state.Inference(occ[0], occ[1], occ[2], [], "colour/occupancy match")
         self.illegal_seen = state.illegal_move_seen(self.board, dets)  # just to explain why nothing is accepted
         return None
 
@@ -251,12 +248,6 @@ class Session:
             self.parked = True
             if before is not None:  # verify (+ recover); raises MoveNotVerified when it cannot be fixed
                 self._verify_and_fix(move, before, saved, recover)
-                if hasattr(self.pp, "note_landing"):  # the move showed up: learn the arm's leftover error from where the piece really landed
-                    for t in transfers:
-                        try:
-                            self.pp.note_landing(t)
-                        except Exception as e:  # never let the trim break a move
-                            self.log(f"  trim: skipped ({e})")
         except Unreachable:
             self.slots = saved
             raise
@@ -286,6 +277,16 @@ class Session:
                 self.log(f"camera check skipped, could not look after the move ({e})")
                 return
             problems, disturbed = v.judge(before, after, self.board, move)
+            for k in range(2):  # the camera window averages still pixels over time: a picture taken seconds after the arm left can still show the old board. Look again before believing a failure.
+                if not problems:
+                    break
+                self.log(f"  camera: first look disagrees ({describe(problems, 'problem')}); looking again in 3 s")
+                time.sleep(3.0)
+                try:
+                    after = v.observe()
+                except Exception:
+                    break
+                problems, disturbed = v.judge(before, after, self.board, move)
             self.disturbed = [(chess.square_name(sq), b, a) for sq, b, a in disturbed]
             if disturbed:
                 self.log("  camera: other pieces changed during the move, please check: " + describe(disturbed, "disturbed"))
@@ -304,6 +305,9 @@ class Session:
             return False
         mover = "w" if self.board.turn else "b"
         src, dst = move.from_square, move.to_square
+        if after[dst] == mover:  # the destination already holds the mover's piece: never replay (it would pick from an empty square)
+            self.log("  camera: the destination holds the piece, not replaying")
+            return False
         if after[src] == mover:  # still standing on its source square
             self.log("  camera: the piece is still on its source square: playing the move again")
             self.slots = copy.deepcopy(saved_slots)

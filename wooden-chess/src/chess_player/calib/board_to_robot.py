@@ -21,6 +21,19 @@ from chess_player.geometry import fit_rigid
 from chess_player.motion.ik import IK
 
 
+def release_stuck_torque(bus):
+    """A motor left holding torque after an earlier run (wrist roll with a stale goal) goes into overload and stops answering
+    the connect handshake ("Missing motor IDs: 5"). Switch torque off on every motor before connecting."""
+    from lerobot.motors.feetech.tables import STS_SMS_SERIES_CONTROL_TABLE as T
+    ph = bus.port_handler
+    ph.openPort(); ph.setBaudRate(bus.default_baudrate)
+    for m in bus.motors.values():
+        for _ in range(3):
+            if bus._write(*T["Torque_Enable"], m.id, 0, num_retry=2, raise_on_error=False)[0] == 0:
+                break
+    ph.closePort()
+
+
 def read_joints():
     from lerobot.motors import Motor, MotorCalibration, MotorNormMode
     from lerobot.motors.feetech import FeetechMotorsBus
@@ -29,6 +42,7 @@ def read_joints():
     cal = {k: MotorCalibration(**v) for k, v in json.loads(cal_path.read_text()).items()}
     motors = {j: Motor(i + 1, "sts3215", MotorNormMode.DEGREES) for i, j in enumerate(C.ARM_JOINTS)}
     bus = FeetechMotorsBus(C.FOLLOWER_PORT, motors, calibration={j: cal[j] for j in C.ARM_JOINTS})
+    release_stuck_torque(bus)
     bus.connect(handshake=True)
     return bus
 
@@ -134,9 +148,9 @@ def main():
     bus.disable_torque(free)
     # lock the roll where the IK drives it: the touches must be made in the same condition the arm plays in
     now = bus.sync_read("Present_Position", num_retry=2)
-    bus.write("Goal_Position", "wrist_roll", float(now["wrist_roll"]))  # hold where it is first (no jump)
+    ik.wrist_roll = C.WRIST_ROLL_DEG
+    bus.write("Goal_Position", "wrist_roll", float(now["wrist_roll"]))
     bus.write("Torque_Enable", "wrist_roll", 1)
-    bus.write("Goal_Position", "wrist_roll", float(C.WRIST_ROLL_DEG))
     time.sleep(1.2)
     print(f"Torque is OFF on pan / lift / elbow / wrist-flex: guide the tip by hand. The wrist roll is locked at "
           f"{C.WRIST_ROLL_DEG:.1f} deg (jaws side by side): do not force it.\n")
@@ -154,6 +168,10 @@ def main():
             robot_pts.append(p)
             joints.append(qv.tolist())
     finally:
+        try:
+            bus.disable_torque()  # never leave the roll motor holding torque (it overloads and drops off the bus)
+        except Exception:
+            pass
         bus.port_handler.closePort()
 
     report_and_save(list(points), board_pts, robot_pts, joints, corners_only=not a.grid)

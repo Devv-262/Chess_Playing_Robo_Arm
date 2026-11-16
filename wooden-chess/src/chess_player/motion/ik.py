@@ -204,3 +204,16 @@ def solve_or_raise(ik, target_m, seed_deg, max_tilt_deg=90.0, what=""):
             f"{what}: IK error {err:.1f} mm, tilt {tilt:.0f} deg at {np.round(np.asarray(target_m) * 1000)} mm"
         )
     return q
+
+
+def solve_high(ik, T, xy, seed, what):
+    """The 'travel' pose above a square: Z_SAFE if reachable, else lower (squares near the robot base cannot be reached
+    that high: the board now sits close to the arm), never below 30 mm above the board."""
+    last = None
+    for z in (C.Z_SAFE, 110.0, 90.0, 70.0, 55.0, 40.0, 35.0, 30.0):
+        try:
+            return solve_or_raise(ik, T(*xy, z), seed, what=f"{what} (travel height {z:.0f} mm)")
+        except Exception as e:
+            last = e
+    raise last
+

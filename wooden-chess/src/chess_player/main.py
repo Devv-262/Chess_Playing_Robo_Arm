@@ -16,7 +16,7 @@ from chess_player import config as C
 from chess_player.game import state
 from chess_player.game.session import Session
 from chess_player.motion.ik import Unreachable
-from chess_player.motion.pick_place import GraspFailed
+from chess_player.motion.transfers import GraspFailed
 
 
 def read_line_or_watch(s: Session, prompt):

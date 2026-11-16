@@ -37,7 +37,6 @@ EXT_CAMERA_URL = _os.environ.get(
     "CHESS_CAMERA_URL",
     1 if _WIN else "http://127.0.0.1:8771/video",  # wooden rig: the always-open camera window (scripts/livecam.py) serves the camera
 )
-USE_RECIPE_GRASP = True  # motion/wooden_pick_place.py (the verified wooden-rig recipe) instead of the old PickPlace
 # 2026-11-05: the phone (IP Webcam) third-person setup was dropped; the Ausha webcam was moved off the gripper and
 # mounted as the fixed third-person camera instead (back to the original rig's arrangement). Override per network
 # with $env:CHESS_CAMERA_URL / export CHESS_CAMERA_URL if it ever needs to point elsewhere.
@@ -110,7 +109,7 @@ BOARD_BORDER_MM = 30.4  # wooden border outside the line (derived from the nomin
 PLAY_MM = 8 * SQUARE_MM  # 240.0 playing area (board frame origin = its a1 corner)
 BOARD_OUTER_MM = PLAY_MM + 2 * (BOARD_LINE_MM + BOARD_BORDER_MM)  # 304.8 whole board
 EDGE_MM = BOARD_LINE_MM + BOARD_BORDER_MM  # 32.4 from the playing area to the board's outer edge
-BOARD_THICKNESS_MM = 25.0  # ESTIMATE (box-style folding board): playing surface height above the table; MEASURE
+BOARD_THICKNESS_MM = 20.0  # playing surface height above the table (user, 2026-11-10: about 2 cm); only the graveyard/spare height depends on it
 # ArUco markers (DICT_4X4_50), ids 0..3 printed MARKER_MM wide, taped outside the playing area.
 # MARKER_CENTERS gives each marker's center in board mm. Default: diagonally out from each corner.
 ARUCO_DICT = "DICT_4X4_50"
@@ -313,7 +312,8 @@ DROP_DETECT_PCT = 3.9  # while carrying: jaws closing this much past the holding
 RECOVERY_ATTEMPTS = 2  # after a failed grab / drop: look with the webcam and retry this many times
 RELEASE_OPEN_PCT = 10.3  # to let go, open only this much past the holding reading (keeps the moving finger off neighbours)
 RELEASE_GAP_MM = 4.0  # how far the moving finger moves away from the piece when releasing (collision model)
-GRIPPER_LOOK = 0.0  # % at the look/home pose: closed (user decision 2026-10-17)
+GRIPPER_MIN_PCT = 3.0  # % the jaws never close below (a plastic strip on the finger bends when fully closed; user 2026-11-10). Raise it if it still bends.
+GRIPPER_LOOK = GRIPPER_MIN_PCT  # % at the look/home pose: slightly open, not closed
 # Grasp: command (grip - GRIP_SQUEEZE) and read where the jaws stop. `grip` above is the reading at contact.
 GRIP_SQUEEZE = 5.2  # % past contact (LeRobot's gripper torque limit keeps the squeeze gentle)
 GRIP_EMPTY_TOL = 1.9  # jaws stopped within this of the command = nothing in the hand
@@ -403,7 +403,21 @@ GRIP_S /= ARM_SPEED
 # wrist roll reads +0.879 deg for the same physical angle, gripper % x1.2914 for the same jaw position. The values
 # here are converted so the arm moves physically exactly as before.
 WRIST_ROLL_ZERO_SHIFT_DEG = 0.0  # (old rig: 0.879 after matching the follower to the leader; 2026-11-04 the follower was freshly calibrated here)
-WRIST_ROLL_DEG = -96.9  # 2026-11-04 new calibration: the roll held during the corner touches (median -96.9); (old rig: -86.9) # roll used for the corner touches (calibration) and grasps: jaws side by side, so a tilted
+WRIST_ROLL_DEG = -94.0  # 2026-11-10 USER-SET by hand (read from the arm, stable): the arm must play at THIS roll, not drive the wire; was -96.9;  # 2026-11-04 new calibration: the roll held during the corner touches (median -96.9); (old rig: -86.9) # roll used for the corner touches (calibration) and grasps: jaws side by side, so a tilted
+# The roll the user set BY HAND is stored in data/wrist_roll.json (written by adopt_wrist_roll) and wins over the number above.
+try:
+    import json as _jr
+    WRIST_ROLL_DEG = float(_jr.loads((DATA / "wrist_roll.json").read_text())["wrist_roll_deg"])
+except Exception:
+    pass
+
+
+def adopt_wrist_roll(deg):
+    """Use `deg` (read from the arm after the user set it by hand) as the playing roll, now and in later runs."""
+    global WRIST_ROLL_DEG
+    import json as _jw
+    WRIST_ROLL_DEG = float(deg)
+    (DATA / "wrist_roll.json").write_text(_jw.dumps({"wrist_roll_deg": round(float(deg), 2)}))
                         # gripper keeps both fingers level (at roll 0 the lower finger hit the far squares)
 USE_SAG_MODEL = False  # gravity sag model (calib/sag_calibration.py) made far squares worse; use Run B's method:
                        # measure at the hover point (settle) and carry that correction down
@@ -441,7 +455,7 @@ VOICE_MAX_UTTERANCE_S = 12.0
 ENGINE_TIME_S = 1.0
 ENGINE_VARIETY_CP = 35  # pick randomly among the best moves within this many centipawns of the best (0 = always the single best move)
 ENGINE_VARIETY_LINES = 4  # how many best lines to look at for that
-ROBOT_COLOR = "black"  # fallback only: once the webcam corners are clicked, the robot's colour is read from them
+ROBOT_COLOR = "white"  # the robot plays white (the human sits on the black side)
                        # (vision/ext_camera.robot_color_from_corners): rank 1 on the robot's side = robot white
 
 # Per-move camera verification (game/verify.py): look before and after every robot move, fix or report a move that did not happen.
