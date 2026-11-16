@@ -251,3 +251,4 @@ sudo cp setup/99-so100.rules /etc/udev/rules.d/ && sudo udevadm control --reload
   then asks you to make that move by hand.
 - **Robo's language model is small (2B).** Its answers about what it "sees" are unreliable. Game commands use
   fixed rules, never the model.
+# Chess_Playing_Robo_Arm
