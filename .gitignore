@@ -18,10 +18,7 @@ bin/stockfish
 data/models/
 weights/
 
-# ---- Model weights (too big for git; the trained one is data/yolo/best.pt: share it as a GitHub release,
-#      or retrain it from data/dataset with `python -m chess_player.vision.train_yolo`)
-*.pt
-*.onnx
+# ---- Model weights are tracked (best.pt is ~52 MB)
 
 # ---- Generated (re-created by the tools)
 data/yolo_runs/
